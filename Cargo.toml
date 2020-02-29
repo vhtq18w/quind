@@ -1,0 +1,7 @@
+[package]
+name = "quind"
+version = "0.1.0"
+authors = ["Burgess Chang <brs@sdf.org>"]
+edition = "2018"
+
+[dependencies]
