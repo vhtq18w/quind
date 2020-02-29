@@ -5,3 +5,15 @@ authors = ["Burgess Chang <brs@sdf.org>"]
 edition = "2018"
 
 [dependencies]
+bstr = "0.2.11"
+kv = "0.20.1"
+lazy_static = "1.4.0"
+log = "0.4.8"
+serde_json = "1.0"
+
+[build-dependencies]
+lazy_static = "1.4.0"
+
+[dev-dependencies]
+serde = { features = ["derive"], version = "1.0.104"}
+walkdir = "2.3.1"
