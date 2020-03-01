@@ -1,4 +1,4 @@
-use notify::{Watcher, RecommendedWatcher, RecursiveMode, Event};
+use notify::{Watcher, RecommendedWatcher, RecursiveMode, Event, Config};
 use std::path::{Path};
 use std::sync::mpsc;
 use thiserror::Error as TError;
@@ -22,13 +22,21 @@ impl Monitor {
     pub fn new() -> Monitor {
         let (tx, rx) = mpsc::channel();
 
-        let watcher: Result<RecommendedWatcher, notify::Error> = Watcher::new_immediate(move |result| {
+        let mut watcher: Result<RecommendedWatcher, notify::Error> = Watcher::new_immediate(move |result| {
             tx.send(result).unwrap();
         });
 
         Monitor {
             watcher: Box::new(watcher.unwrap()),
             rx,
+        }
+    }
+
+    pub fn set_precise(&mut self) -> Result<bool, Error> {
+        let precise_event = self.watcher.configure(Config::PreciseEvents(true));
+        match precise_event {
+            Ok(_) => Ok(true),
+            Err(e) => Err(Error::Notify(e)),
         }
     }
 
