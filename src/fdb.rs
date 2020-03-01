@@ -1,7 +1,6 @@
 use kv::{Config, Store};
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
-use std::{fs, path};
 use thiserror::Error as TError;
 
 #[derive(Debug, TError)]
@@ -113,6 +112,8 @@ impl Fdb {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    use std::fs;
 
     fn reset(name: &str) -> String {
         let s = format!("./instance/{}", name);
