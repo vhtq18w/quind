@@ -5,6 +5,4 @@ pub mod error;
 pub mod fdb;
 pub mod monitor;
 
-fn main() -> Result<(), Error> {
-    Ok(())
-}
+fn main() -> () {}
