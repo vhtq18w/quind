@@ -1,7 +1,29 @@
+use crate::monitor::Error as MonitorError;
 use kv::{Config, Store};
+use notify::event::{EventKind, Event, AnyMap};
 use serde::{Deserialize, Serialize};
+use std::convert::From;
+use std::error;
+use std::fmt;
 use std::path::{Path, PathBuf};
 use thiserror::Error as TError;
+
+#[derive(Debug, Clone)]
+pub struct RecordError {
+    info: String,
+}
+
+impl fmt::Display for RecordError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Record error: {}", self.info)
+    }
+}
+
+impl error::Error for RecordError {
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+        None
+    }
+}
 
 #[derive(Debug, TError)]
 pub enum Error {
@@ -12,7 +34,17 @@ pub enum Error {
     KVInitError,
 
     #[error("Json error: Convert failed: {0}")]
-    JSON(#[from] serde_json::Error)
+    JSON(#[from] serde_json::Error),
+
+    #[error("Record error: Record CRUD event error: {0}")]
+    Record(#[from] RecordError),
+}
+
+#[derive(Clone)]
+pub struct Record{
+    kind: EventKind,
+    paths: Vec<PathBuf>,
+    attrs: AnyMap,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
