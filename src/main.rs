@@ -1,10 +1,10 @@
-#[macro_use]
 extern crate lazy_static;
 extern crate serde_json;
 
-pub mod fdb;
 pub mod error;
+pub mod fdb;
+pub mod monitor;
 
-fn main() {
-    println!("Hello, world!");
+fn main() -> Result<(), Error> {
+    Ok(())
 }
